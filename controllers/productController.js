@@ -1,9 +1,8 @@
 const fs = require("fs");
+const Product = require("../models/Product");
 
-exports.getAllProducts = (req, res) => {
-  const products = JSON.parse(
-    fs.readFileSync(`${__dirname}/../data/products.json`)
-  );
+exports.getAllProducts = async (req, res) => {
+  const products = await Product.find();
 
   res.status(200).json({
     status: "success",
@@ -15,32 +14,23 @@ exports.getAllProducts = (req, res) => {
   });
 };
 
-exports.addProduct = (req, res) => {
-  const products = JSON.parse(
-    fs.readFileSync(`${__dirname}/../data/products.json`)
-  );
-  products.push(req.body);
-  fs.writeFileSync(`${__dirname}/data/products.json`, JSON.stringify(products));
-
+exports.addProduct = async (req, res) => {
+  const newProduct = await Product.create(req.body);
   res.status(200).json({
     status: "success",
     data: {
-      products,
+      product_added: newProduct,
     },
   });
 };
 
-exports.getProductById = (req, res) => {
-  const products = JSON.parse(
-    fs.readFileSync(`${__dirname}/../data/products.json`)
-  );
-
-  const foundProduct = products.find((p) => p.id == req.params.id);
+exports.getProductById = async (req, res) => {
+  const foundProduct = await Product.findById(req.params.id);
   if (foundProduct) {
     res.status(200).json({
       status: "success",
       data: {
-        product: foundProduct,
+        product_found: foundProduct,
       },
     });
   } else {
@@ -48,4 +38,29 @@ exports.getProductById = (req, res) => {
       status: "not found",
     });
   }
+};
+exports.deleteProductById = async (req, res) => {
+  const deletedProduct = await Product.findByIdAndDelete(req.params.id);
+  const products = await Product.find();
+  console.log(deletedProduct);
+  res.status(200).json({
+    status: "success",
+    data: {
+      product_deleted: deletedProduct,
+      products: products,
+    },
+  });
+};
+
+exports.updateProductById = async (req, res) => {
+  const updatedProduct = await Product.findByIdAndUpdate(req.params.id,req.body,{new:true});
+  const products = await Product.find();
+
+  res.status(200).json({
+    status: "success",
+    data: {
+      product_updated: updatedProduct,
+      products: products,
+    },
+  });
 };
