@@ -39,3 +39,36 @@ exports.getProductById = async (req, res) => {
     });
   }
 };
+exports.deleteProductById = async (req, res) => {
+  await Product.destroy({
+    where: {
+      id: req.params.id
+    }
+  });
+
+  res.status(200).json({
+    status: "Product deleted",
+  });
+};
+
+exports.updateProductById = async (req, res) => {
+  await Product.update({ 
+    productName: req.body.productName,
+    description: req.body.description,
+    price: req.body.price
+   }, 
+   {
+    where: {
+      id: req.params.id
+    }
+  });
+  const products = await Product.find();
+
+  res.status(200).json({
+    status: "success",
+    data: {
+      product_updated: updatedProduct,
+      products: products,
+    },
+  });
+};
