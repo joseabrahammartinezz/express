@@ -20,7 +20,7 @@ exports.addProduct = catchAsync(async (req, res) => {
   res.status(200).json({
     status: "success",
     data: {
-      product_added: newProduct,
+      product: newProduct,
     },
   });
 });
@@ -31,7 +31,7 @@ exports.getProductById = catchAsync(async (req, res) => {
     res.status(200).json({
       status: "success",
       data: {
-        product_found: foundProduct,
+        product: foundProduct,
       },
     });
   } else {
@@ -40,6 +40,7 @@ exports.getProductById = catchAsync(async (req, res) => {
     });
   }
 });
+
 exports.deleteProductById = catchAsync(async (req, res) => {
   const deletedProduct = await Product.findByIdAndDelete(req.params.id);
   const products = await Product.find();
