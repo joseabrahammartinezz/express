@@ -5,6 +5,8 @@ process.on("uncaughtException", (err) => {
   process.exit(1);
 });
 const Product = require("./models/Product");
+const User = require("./models/User");
+const shoppingCart = require("./models/Shopping_cart")
 const app = require("./app");
 const port = process.env.PORT;
 

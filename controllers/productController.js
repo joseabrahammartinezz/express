@@ -34,14 +34,13 @@ exports.getProductById = catchAsync(async (req, res) => {
         product: foundProduct,
       },
     });
-  } else {
+  } else {  
     res.status(404).json({
       status: "not found",
     });
   }
 });
-
-exports.deleteProductById = catchAsync(async (req, res) => {
+exports.deleteProductById = async (req, res) => {
   const deletedProduct = await Product.findByIdAndDelete(req.params.id);
   const products = await Product.find();
   console.log(deletedProduct);
@@ -49,13 +48,13 @@ exports.deleteProductById = catchAsync(async (req, res) => {
     status: "success",
     data: {
       product_deleted: deletedProduct,
-      products: products,
+      products_actually: products,
     },
   });
-});
+};
 
-exports.updateProductById = catchAsync(async (req, res) => {
-  const updatedProduct = await Product.findByIdAndUpdate(req.params.id,req.body,{new:true});
+exports.updateProductById = async (req, res) => {
+  const updatedProduct = await Product.findByIdAndUpdate(req.params.id,req.body,{new:true},{ $set: { status: "PAID" }});
   const products = await Product.find();
 
   res.status(200).json({
@@ -65,4 +64,4 @@ exports.updateProductById = catchAsync(async (req, res) => {
       products: products,
     },
   });
-});
+};
