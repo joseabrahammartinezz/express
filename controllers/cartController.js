@@ -47,7 +47,7 @@ exports.addProduct = catchAsync(async (req, res) => {
     }
 });
 
-exports.deleteProductById = async (req, res) => {
+exports.deleteProductById = catchAsync(async (req, res) => {
  // console.log ("ingreso");
  // db.people.find({ friends: { id:1, name:"Trinity Ford" } })
   const filter = {status:"PENDING",products: { id:req.params.id }} ;
@@ -65,7 +65,7 @@ exports.deleteProductById = async (req, res) => {
       product_deleted: deletedProduct,
     },
   });
-};
+});
 
 exports.payCart = catchAsync(async (req, res) => {
  
